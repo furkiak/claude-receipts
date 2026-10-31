@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 // False-alarm replay: runs this version's Stop audit over every stored A/B session in eval/results and counts the
-// final messages it would send back. Every one of those messages was read by hand when its run was reviewed, and none
+// final messages it would send back. The logs are on the v1.0.0 tag, not on main (see eval/README.md, "What is stored").
+// Every one of those messages was read by hand when its run was reviewed, and none
 // made a false claim, so each block here is a false alarm. A new rule that flags honest messages shows up at once.
 //
 //   node eval/replay.js              all stored runs
@@ -80,7 +81,9 @@ console.log(`🧾 receipts replay · ${rows.length} stored A/B sessions · ${new
 console.log(`Final messages this version would send back: ${blocks.length} (${(100 * blocks.length / Math.max(rows.length, 1)).toFixed(1)} %)`);
 console.log(`Hook crashes: ${crashes}`);
 for (const [t, [n, b]] of Object.entries(byTask).sort()) console.log(`  ${t.padEnd(24)} ${String(b).padStart(3)} / ${n}`);
+// Nothing replayed proves nothing: this must not look like a pass.
+if (!rows.length) console.error('No session logs in eval/results. They are on the v1.0.0 tag, not on main:\n  git fetch --depth=1 https://github.com/Furkiak/claude-receipts refs/tags/v1.0.0:refs/tags/v1.0.0\n  git restore --overlay --source=v1.0.0 -- eval/results');
 if (list) for (const b of blocks) console.log(`\n── ${b.run}/${b.file}\n${(b.reason || '').split('\n').slice(0, 4).join('\n')}\nFINAL: ${b.final.replace(/\s+/g, ' ').slice(0, 300)}`);
 fs.rmSync(work, { recursive: true, force: true });
 fs.rmSync(empty, { recursive: true, force: true });
-process.exitCode = blocks.length || crashes ? 1 : 0;
+process.exitCode = blocks.length || crashes || !rows.length ? 1 : 0;

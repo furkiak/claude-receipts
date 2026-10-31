@@ -1,2 +1,5 @@
 node_modules/
 .DS_Store
+# Raw A/B logs live on the v1.0.0 tag: everything on main lands on each user's disk twice when they install.
+eval/results/*/
+eval/results/*.jsonl

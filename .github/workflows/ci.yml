@@ -38,4 +38,9 @@ jobs:
         with:
           dotnet-version: '9.0.x'
       - run: node eval/ab.js --check
+      # Everything on main lands on each user's disk twice when they install, so it has to stay small.
+      - run: test "$(git ls-files -z | xargs -0 cat | wc -c)" -lt 2000000
+      # The session logs replay needs are on the v1.0.0 tag.
+      - run: git fetch --depth=1 origin refs/tags/v1.0.0:refs/tags/v1.0.0
+      - run: git restore --overlay --source=v1.0.0 -- eval/results
       - run: node eval/replay.js

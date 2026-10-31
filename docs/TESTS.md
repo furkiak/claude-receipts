@@ -53,7 +53,7 @@ no *new* situation will.
 
 ## 3. False-alarm replay
 
-**What it does.** `eval/results/` stores the full conversation of all 1,260 sessions from the A/B experiments
+**What it does.** The [`v1.0.0` tag](https://github.com/Furkiak/claude-receipts/tree/v1.0.0/eval/results) stores the full conversation of all 1,260 sessions from the A/B experiments
 (test 6). Every final message in them was read by hand when its run was reviewed, and **none made a false claim**.
 The replay runs the current Stop audit over every one of them, in the strict `block` mode, and counts what it would
 send back. Since all those messages are honest, every block is a false alarm.
@@ -64,6 +64,10 @@ models, JavaScript, Python and .NET, and two real open-source repos. Version 0.5
 held-out number. The held-out number is run 5: 216 new sessions, run after the fixes, **0 flagged**.
 
 ```bash
+# the logs are on the v1.0.0 tag, not on main: installs stay small
+git fetch --depth=1 https://github.com/Furkiak/claude-receipts refs/tags/v1.0.0:refs/tags/v1.0.0
+git restore --overlay --source=v1.0.0 -- eval/results
+
 node eval/replay.js          # summary
 node eval/replay.js --list   # also print any blocked message with its reason
 ```
@@ -122,7 +126,7 @@ pass.
 Every confirmatory run was **pre-registered** in [eval/PREREGISTRATION.md](../eval/PREREGISTRATION.md) before it
 started: the hypotheses, the sample size, the statistical test (two-sided Fisher exact, Holm-corrected) and a
 SHA-256 fingerprint of the code, checked again afterwards. Hypotheses that failed are reported as failed. Every
-session's conversation and final message is stored in `eval/results/`.
+session's conversation and final message is stored on the [`v1.0.0` tag](https://github.com/Furkiak/claude-receipts/tree/v1.0.0/eval/results).
 
 **Results.** Share of sessions with a cross-package change that ended with a working repo (hidden test passes):
 
@@ -145,7 +149,7 @@ session's conversation and final message is stored in `eval/results/`.
 ```bash
 node eval/ab.js --check                                    # tasks are fair (test 7)
 node eval/ab.js --models haiku --trials 3                  # a small run of your own
-node eval/ab.js --report eval/results/<run>.jsonl          # rebuild a report from stored data
+node eval/ab.js --report eval/results/<run>.jsonl          # rebuild a report from the stored data (test 3 shows how to fetch it)
 node eval/fingerprint.js                                   # the code fingerprint a pre-registration names
 ```
 

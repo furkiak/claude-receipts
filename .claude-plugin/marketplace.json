@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "receipts: proof-of-work for Claude Code. Checks every test/build/lint/\"it works\" claim against a fresh, passing run in the transcript, and gets Claude to run the full suite after its last change.",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "plugins": [
     {

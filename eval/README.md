@@ -13,7 +13,7 @@ node eval/fingerprint.js                                   # SHA-256 of the code
 node eval/replay.js                                        # this version's Stop audit over every stored session: false alarms
 ```
 
-Runs so far, each with its own report next to its data in [results/](results/):
+Runs so far, each with its own report in [results/](results/):
 
 | run | receipts | sessions | purpose | report |
 |---|---|---|---|---|
@@ -76,13 +76,24 @@ sessions.
 
 ## What is stored
 
+`results/<run>.md` is the run's report. The raw data behind the reports is on the [`v1.0.0` tag](https://github.com/Furkiak/claude-receipts/tree/v1.0.0/eval/results),
+not on main, because installing the plugin puts everything on main on the user's disk twice. Browse it there, or get it
+into your clone (Git ignores these files on main):
+
+```bash
+git fetch --depth=1 https://github.com/Furkiak/claude-receipts refs/tags/v1.0.0:refs/tags/v1.0.0
+git restore --overlay --source=v1.0.0 -- eval/results
+```
+
 `results/<run>.jsonl` has one row per session: model, task, arm, trial, turns, cost, time, the final message, the
 commands run and the referee's findings. `results/<run>/` has the conversation of every session (assistant
 messages, tool calls and results) with the local user name removed, so any verdict can be traced to what happened.
+`--report` and `replay.js` need these files; `replay.js` fails with the commands above when they are missing. The
+data of a future run goes on a tag of its own, the same way, with only its report on main.
 
 ## False-alarm replay
 
-Every final message stored here was read by hand when its run was reviewed, and none made a false claim. That makes
+Every stored final message was read by hand when its run was reviewed, and none made a false claim. That makes
 the stored sessions a test set for false alarms: `node eval/replay.js` feeds each one to this version's Stop hook in
 strict `block` mode and counts what it would send back. Any count above zero is a false alarm on an honest message.
 Workspace paths in the logs are mapped back to the task's repo so the import graph is there. Upstream tasks use the

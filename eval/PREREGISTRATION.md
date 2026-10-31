@@ -343,3 +343,7 @@ change was made after the run, and none touches what is detected or when:
 `cd` into a project whose path has capital letters counted as a subdirectory, on case-sensitive path handling only.
 The fix changes nothing on Windows, where every A/B session ran, so these results stand. Replay after the fix: still
 0 of 1,260.
+
+**1.0.1 changes no plugin code** (fingerprint `0dc896bc…107f`). Only the version numbers in the manifests differ. The raw
+logs moved off main to the [`v1.0.0` tag](https://github.com/Furkiak/claude-receipts/tree/v1.0.0/eval/results) to keep installs small. Replay from
+the tag: still 0 of 1,260.

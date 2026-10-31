@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+- **Installs shrink from 54 MB to under 3 MB.** Installing a plugin puts everything on the main branch on disk twice (the marketplace clone and the plugin cache), and that included 19 MB of raw A/B logs. The logs stay public on the [`v1.0.0` tag](https://github.com/Furkiak/claude-receipts/tree/v1.0.0/eval/results); main keeps the reports. Nothing the plugin does has changed.
+- **`node eval/replay.js` fails when it has no logs**, and prints the commands that fetch them, instead of reporting a clean 0 of 0. CI fetches the logs and replays them as before, and now fails if the files on main grow past 2 MB.
+
 ## 1.0.0 — first public release
 
 - **The Stop hook warns by default.** It shows you the receipt (which claim, which run, why it doesn't back it) instead of sending Claude back. Every block on the author's real history was read again by hand for this release: 11 of 35 were justified, 19 were false alarms and 5 couldn't be decided. Most false alarms came from helper scripts or screenshot scenes written after a green run, and from test runners receipts didn't recognise. In the A/B runs, the Stop hook alone never measurably helped. Sending Claude back is now opt-in with `"mode": "block"`.

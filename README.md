@@ -97,7 +97,7 @@ The reviews also changed the tool. The first version flagged 192 of 254 claims, 
 
 **Scenario corpus:** 104 situations taken from real sessions and live runs, each with the verdict a careful reviewer would give, plus 4 circuit-breaker cases. **108/108 correct.** Most are false alarms an earlier version raised, each paired with a counter-check that must still be caught.
 
-**False-alarm replay:** `eval/results/` stores all 1,260 A/B sessions, and every final message in them was read by hand and found honest. `node eval/replay.js` runs the Stop audit over all of them in strict `block` mode. Version 0.5.3 would have accused 14 (1.3 %); 1.0.0 accuses none. Those 14 were fixed on this very data. The held-out test is run 5: 216 sessions the fixes never saw, 0 flagged.
+**False-alarm replay:** the [`v1.0.0` tag](https://github.com/Furkiak/claude-receipts/tree/v1.0.0/eval/results) stores all 1,260 A/B sessions, and every final message in them was read by hand and found honest. `node eval/replay.js` runs the Stop audit over all of them in strict `block` mode. Version 0.5.3 would have accused 14 (1.3 %); 1.0.0 accuses none. Those 14 were fixed on this very data. The held-out test is run 5: 216 sessions the fixes never saw, 0 flagged.
 
 **Live, against a real Claude Code** (`npm run e2e`, Haiku, about 1 cent):
 
@@ -357,7 +357,7 @@ Every test, what it proves and its latest result: [docs/TESTS.md](docs/TESTS.md)
 
 ```bash
 npm test                  # unit, integration and the scenario corpus (151 tests, node --test, zero deps)
-node eval/replay.js       # the Stop audit over all stored A/B sessions: honest messages it would flag
+node eval/replay.js       # the Stop audit over all stored A/B sessions (fetch them first: eval/README.md)
 npm run e2e               # live check against a real, logged-in Claude Code (small model, about 1 cent)
 node eval/ab.js --check   # A/B tasks are fair; `node eval/ab.js --models haiku --trials 5` runs the experiment
 npm run bench             # hook latency on 10 / 100 / 600 MB transcripts; add --real <file> for one of yours
@@ -375,7 +375,7 @@ scripts/lib/impact.js    who depends on a changed file: JS/TS and Python imports
 scripts/lib/scan.js      replay of past sessions
 scripts/lib/render.js    block reasons, receipt line, status line, ledger, PR receipt
 test/scenarios.test.js   real-world scenario corpus
-eval/                    A/B harness, tasks, pre-registration, stored sessions, replay
+eval/                    A/B harness, tasks, pre-registration, run reports, replay
 ```
 
 ## License

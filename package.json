@@ -1,6 +1,6 @@
 {
   "name": "claude-receipts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Proof-of-work for Claude Code: no receipts, no \"done\".",
   "license": "MIT",
   "private": true,
