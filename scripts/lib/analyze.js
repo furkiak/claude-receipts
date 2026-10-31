@@ -211,9 +211,10 @@ function untestedDependents(events, turn, lastEdit, cwd, finalText) {
   // `cd /c/work/app/packages/core && …` and `cd C:\work\app\packages\core` scope a run as much as `cd packages/core`.
   const relScope = (s) => {
     if (!s) return s;
-    const abs = /^\/[a-z]\//i.test(s) ? `${s[1]}:${s.slice(2)}` : s;
+    const abs = process.platform === 'win32' && /^\/[a-z]\//i.test(s) ? `${s[1]}:${s.slice(2)}` : s;
     if (!path.isAbsolute(abs)) return s;
-    const rel = path.relative(cwd, abs).replace(/\\/g, '/').toLowerCase();
+    // scopeOf lowercases, and on macOS and Linux path.relative is case-sensitive: compare both in lower case.
+    const rel = path.relative(cwd.toLowerCase(), abs.toLowerCase()).replace(/\\/g, '/');
     return rel === '' ? null : rel.startsWith('..') ? s : rel;
   };
   const shape = runs.map((r) => {

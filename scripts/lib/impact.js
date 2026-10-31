@@ -148,12 +148,24 @@ function covers(cmd, dep, filtered, scope) {
   return c.includes(path.posix.basename(d).replace(/\.\w+$/, '')) || (dir !== '.' && c.includes(dir)) || (top.includes('/') && c.includes(top));
 }
 
+// A directory given in lower case (scopes are), found on a case-sensitive file system.
+function resolveIgnoringCase(root, rel) {
+  if (path.isAbsolute(rel)) return rel;
+  let cur = root;
+  for (const seg of rel.split(/[\\/]/).filter(Boolean)) {
+    let ents = [];
+    try { ents = fs.readdirSync(cur); } catch { /* not a directory: no match below */ }
+    cur = path.join(cur, ents.find((e) => e.toLowerCase() === seg.toLowerCase()) || seg);
+  }
+  return cur;
+}
+
 // The project file a `dotnet test <path>` run is limited to (a project, or a directory holding exactly one), or null
 // when it runs a solution or everything under the directory.
 function dotnetTarget(root, cmd, scope) {
   const m = /\bdotnet\s+test\b((?:\s+(?!-)[^\s;&|]+)?)/i.exec(String(cmd));
   if (!m) return null;
-  const target = path.resolve(scope ? path.resolve(root, scope) : root, m[1].trim().replace(/^["']|["']$/g, '') || '.');
+  const target = path.resolve(scope ? resolveIgnoringCase(root, scope) : root, m[1].trim().replace(/^["']|["']$/g, '') || '.');
   if (/\.slnx?$/i.test(target)) return null;
   if (PROJ.test(target)) return norm(target);
   let ents = [];

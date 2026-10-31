@@ -338,3 +338,8 @@ change was made after the run, and none touches what is detected or when:
   receipt footer.
 
 `node eval/replay.js` on the released code: 0 of 1,260 flagged, the same as on the run-5 code.
+
+**One later fix does touch detection** (fingerprint `b2db5b2d…7ce1`). The first CI run on macOS found that an absolute
+`cd` into a project whose path has capital letters counted as a subdirectory, on case-sensitive path handling only.
+The fix changes nothing on Windows, where every A/B session ran, so these results stand. Replay after the fix: still
+0 of 1,260.

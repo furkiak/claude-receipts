@@ -412,6 +412,19 @@ test('stop: the code that imports a change must be exercised, unless the summary
   assert.notEqual(verdict(scoped(), 'Status update: the docs build is running in the background.')?.decision, 'block', 'no claim, no nudge');
 });
 
+test('stop: an absolute `cd` works when the project path has capitals (macOS /Users, Linux case-sensitive paths)', () => {
+  const proj = path.join(fs.mkdtempSync(path.join(tmp, 'caps-')), 'MyWork', 'Payments');
+  fs.mkdirSync(proj, { recursive: true });
+  fs.cpSync(MONO, proj, { recursive: true });
+  const core = path.join(proj, 'packages', 'core', 'money.js');
+  const fwd = (p) => p.replace(/\\/g, '/');
+  const scoped = () => session().prompt('make toCents throw on negatives').edit(core)
+    .bash('node --test packages/core/test/money.test.js', '# tests 3\n# pass 3\n# fail 0');
+  const verdict = (s, final) => hook('stop', { transcript_path: s.say(final).write(), cwd: proj, last_assistant_message: final });
+  assert.notEqual(verdict(scoped().bash(`cd "${fwd(proj)}" && npm test`, '# tests 4\n# pass 4\n# fail 0'), 'Done, tests pass.')?.decision, 'block', 'the project root');
+  assert.equal(verdict(scoped().bash(`cd "${fwd(path.join(proj, 'packages', 'core'))}" && node --test`, '# pass 3'), 'Done, tests pass.').decision, 'block', 'only core');
+});
+
 test('session-start names the project\'s full test command', () => {
   const ctx = (dir) => JSON.parse(run('session-start', {}, [], undefined, dir)).hookSpecificOutput.additionalContext;
   assert.match(ctx(MONO), /full test suite is `npm test`/);
@@ -430,6 +443,7 @@ test('.NET: a changed source file stands for its project, and dependents are the
   assert.equal(I.dotnetTarget(DOTNET, 'dotnet test Shop.sln'), null);
   assert.match(I.dotnetTarget(DOTNET, 'dotnet test tests/Core.Tests'), /core\.tests\.csproj$/);
   assert.match(I.dotnetTarget(DOTNET, 'dotnet test', 'tests/Api.Tests'), /api\.tests\.csproj$/, 'cd into a test project');
+  assert.match(I.dotnetTarget(DOTNET, 'dotnet test', 'tests/api.tests'), /api\.tests\.csproj$/, 'scopes arrive in lower case, on any file system');
   assert.equal(I.reaches(DOTNET, I.dotnetTarget(DOTNET, 'dotnet test tests/Core.Tests'), 'src/Api/Api.csproj'), false);
   assert.equal(I.reaches(DOTNET, I.dotnetTarget(DOTNET, 'dotnet test tests/Api.Tests'), 'src/Api/Api.csproj'), true);
   assert.equal(I.isTestFile('src/Shop.UnitTests.csproj'), true);
@@ -476,7 +490,8 @@ test('session-start injects the rules', () => {
 
 test('a crash inside a hook never reaches the session, and is logged when asked', () => {
   const fault = path.join(tmp, 'fault.js');
-  fs.writeFileSync(fault, "require('fs').readSync = () => { throw new Error('injected fault'); };");
+  // Only inside the transcript reader: on Node 18 require() itself goes through fs.readSync.
+  fs.writeFileSync(fault, "const fs = require('fs'); const real = fs.readSync; fs.readSync = function (...a) { if (new Error().stack.includes('streamEntries')) throw new Error('injected fault'); return real.apply(this, a); };");
   const log = path.join(tmp, 'errors.log');
   const f = session().edit('src/a.ts').say('All tests pass.').write();
   const r = spawnSync(process.execPath, ['-r', fault, SCRIPT, 'stop'], { input: JSON.stringify({ transcript_path: f, cwd: tmp }), encoding: 'utf8', env: { ...ENV, RECEIPTS_ERROR_LOG: log } });

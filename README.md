@@ -52,7 +52,7 @@ Eight kinds of tests check it, from unit tests to pre-registered experiments wit
 
 | Test | Result |
 |---|---|
-| Unit and integration tests | 42/42 |
+| Unit and integration tests | 43/43 |
 | Scenario corpus: real situations, each with a reviewer's verdict | 108/108 |
 | False-alarm replay: the audit run over 1,260 honest A/B sessions, strict mode | 0 flagged, 0 of 216 held out (0.5.3 flagged 14) |
 | Live end-to-end in a real Claude Code | passes; no hook crash |
@@ -347,7 +347,7 @@ By default these are only warnings. In `block` mode each costs at most one re-ru
 
 **Can Claude game it?** It is built to catch honest mistakes, which is what the real-history review found: forgotten re-runs, misread output, wrong counts. It is not a sandbox against a model trying to deceive you. A script that just prints `9/9 PASS`, or a test weakened until it passes, would get through (a bare `echo` is not counted).
 
-**Does it work on Windows?** Yes. It was developed and tested live on Windows. CI is configured for Windows, macOS and Linux with Node 18, 20 and 22. It understands Bash and PowerShell tool calls, PowerShell here-strings, and Windows paths.
+**Does it work on macOS and Linux?** The unit tests and scenario corpus run in CI on Windows, macOS and Linux with Node 18, 20 and 22. The live end-to-end runs and all A/B experiments ran on Windows, so wrong verdicts are more likely to be undiscovered elsewhere. The first CI run on macOS found one such bug, now fixed. It understands Bash and PowerShell tool calls, PowerShell here-strings, and Windows paths.
 
 **Is my code or history sent anywhere?** No. There is no network access at all. `/receipts:scan` reads `~/.claude/projects` locally and prints counts; it shows quotes only with `--examples`.
 
@@ -356,7 +356,7 @@ By default these are only warnings. In `block` mode each costs at most one re-ru
 Every test, what it proves and its latest result: [docs/TESTS.md](docs/TESTS.md).
 
 ```bash
-npm test                  # unit, integration and the scenario corpus (150 tests, node --test, zero deps)
+npm test                  # unit, integration and the scenario corpus (151 tests, node --test, zero deps)
 node eval/replay.js       # the Stop audit over all stored A/B sessions: honest messages it would flag
 npm run e2e               # live check against a real, logged-in Claude Code (small model, about 1 cent)
 node eval/ab.js --check   # A/B tasks are fair; `node eval/ab.js --models haiku --trials 5` runs the experiment

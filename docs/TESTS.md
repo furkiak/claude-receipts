@@ -5,7 +5,7 @@ test in the repo: what it does, what a pass proves (and what it doesn't), how to
 
 | # | Test | Question it answers | Run it | Latest result |
 |---|---|---|---|---|
-| 1 | [Unit and integration tests](#1-unit-and-integration-tests) | Does each part do what it says? | `npm test` | 42/42 |
+| 1 | [Unit and integration tests](#1-unit-and-integration-tests) | Does each part do what it says? | `npm test` | 43/43 |
 | 2 | [Scenario corpus](#2-scenario-corpus) | Does it judge real situations the way a careful reviewer would? | `npm test` | 108/108 |
 | 3 | [False-alarm replay](#3-false-alarm-replay) | Does it accuse honest messages? | `node eval/replay.js` | 0 of 1,260 (0 of 216 held out) |
 | 4 | [Your own history](#4-your-own-history) | What would it have flagged in *your* past sessions? | `/receipts:scan` | author: 35 of 233 claims flagged, 11 justified |
@@ -21,7 +21,7 @@ cost money (test 5 about one cent; a full A/B run tens of dollars).
 
 ## 1. Unit and integration tests
 
-**What it does.** 42 tests in `test/receipts.test.js` build transcripts in the exact JSONL format Claude Code writes,
+**What it does.** 43 tests in `test/receipts.test.js` build transcripts in the exact JSONL format Claude Code writes,
 run the real hook entry points on them (as separate processes, the way Claude Code does), and check the output. They
 cover claim detection in seven languages, failure and pass-count parsing for a dozen test runners, the import graph
 (JS/TS, Python and .NET), the incremental transcript cache, config handling, crash safety ("not json" on stdin must

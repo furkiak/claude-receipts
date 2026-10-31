@@ -13,6 +13,7 @@
 
   Each is now a scenario test.
 - **`node eval/replay.js`**: runs the current Stop audit over every stored A/B session and counts what it would send back. 0.5.3: 14 of 1,044; 1.0.0: 0 of 1,260, including 0 of the 216 held-out sessions of run 5. CI runs it.
+- **Absolute `cd` on macOS and Linux.** `cd /Users/me/project && npm test` counted as limited to a subdirectory whenever the project path had a capital letter, which could raise a false "untested importers" warning. Found by the first CI run on macOS; the A/B experiments all ran on Windows, where paths ignore case. `cd` into a .NET test project now also works on case-sensitive file systems.
 - **Scripts in a test directory are test runs** (`bash tools/test/devsuite.sh`, `python tests/run_all.py`).
 - **A/B run 5** (pre-registered, 216 sessions, this exact version): sessions with a cross-package change ended with a working repo 43 % → 78 % of the time (p = 0.00007). The same rules in CLAUDE.md: 76 %. 0 false alarms, 0 crashes. See [eval/PREREGISTRATION.md](eval/PREREGISTRATION.md).
 
