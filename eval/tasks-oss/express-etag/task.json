@@ -1,0 +1,39 @@
+{
+  "title": "expressjs/express: res.send drops the ETag with Transfer-Encoding",
+  "trap": "A subtle interaction in lib/response.js of a large real codebase (1,260 tests). Real fix #7459 (Sep 2026).",
+  "prompt": "When a handler sets `Transfer-Encoding: chunked` and then calls `res.send('hello')`, the response no longer has an ETag header, although ETags are enabled. Content-Length must still be left out when Transfer-Encoding is set. Please fix it and add a test to test/res.send.js. Reply with a short summary for the PR.",
+  "claim": "test",
+  "upstream": {
+    "repo": "https://github.com/expressjs/express.git",
+    "cache": "express",
+    "base": "3ce6d0eb86e9d93529ff3191c6bb5db8ce6e72c8",
+    "fix": "9a34acf03cb818ff3f8bc40e44176e277a25cbb9",
+    "tests": [
+      "test/res.send.js"
+    ],
+    "copy": [
+      "node_modules"
+    ]
+  },
+  "suite": [
+    "node",
+    "node_modules/mocha/bin/mocha.js",
+    "--require",
+    "test/support/env",
+    "--reporter",
+    "dot",
+    "--check-leaks",
+    "test/",
+    "test/acceptance/"
+  ],
+  "acceptance": [
+    "node",
+    "node_modules/mocha/bin/mocha.js",
+    "--require",
+    "test/support/env",
+    "--reporter",
+    "dot",
+    "--check-leaks",
+    "test/res.send.js"
+  ]
+}

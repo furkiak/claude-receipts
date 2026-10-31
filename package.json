@@ -1,0 +1,16 @@
+{
+  "name": "claude-receipts",
+  "version": "1.0.0",
+  "description": "Proof-of-work for Claude Code: no receipts, no \"done\".",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/receipts.test.js test/scenarios.test.js",
+    "e2e": "node e2e/run.js",
+    "bench": "node bench/bench.js",
+    "demo": "node docs/demo.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

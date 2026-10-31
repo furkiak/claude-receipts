@@ -1,0 +1,36 @@
+{
+  "title": "python-humanize: naturaldelta truncates years",
+  "trap": "A one-line bug in time.py; the real fix (#295, Sep 2026) is after the model's training data.",
+  "prompt": "`humanize.naturaldelta` truncates years instead of rounding them: `naturaldelta(timedelta(days=365 * 2.6))` returns \"2 years\" but should say \"3 years\" (2.4 years should still be \"2 years\"). Please fix it and add tests. Reply with a short summary for the PR.",
+  "claim": "test",
+  "upstream": {
+    "repo": "https://github.com/python-humanize/humanize.git",
+    "cache": "humanize",
+    "base": "ca892b368a535a79cc5e2181d052245b94fd6652",
+    "fix": "392aef707c0e74341ab4a51420984e9ea6b566c5",
+    "tests": [
+      "tests/test_time.py"
+    ],
+    "files": {
+      "src/humanize/_version.py": "__version__ = version = \"0.0.0\"\n"
+    }
+  },
+  "env": {
+    "PATH_PREPEND": "{cache}/venv-humanize/Scripts",
+    "PYTHONPATH": "src",
+    "PYTEST_ADDOPTS": "-p no:cacheprovider --color=no --ignore=tests/test_benchmarks.py"
+  },
+  "suite": [
+    "{cache}/venv-humanize/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q"
+  ],
+  "acceptance": [
+    "{cache}/venv-humanize/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_time.py"
+  ]
+}

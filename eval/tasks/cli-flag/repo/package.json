@@ -1,0 +1,5 @@
+{
+  "name": "sales-report",
+  "private": true,
+  "bin": { "sales-report": "cli.js" }
+}

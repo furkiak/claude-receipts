@@ -1,0 +1,36 @@
+{
+  "title": "python-humanize: intword rounding carry for huge numbers",
+  "trap": "Floating-point carry check in number.py, real fix #346 (Sep 2026).",
+  "prompt": "`humanize.intword(10**24 - 1)` returns \"1000.0 sextillion\" instead of \"1.0 septillion\". Values just below a power of a thousand should carry into the next unit, for every unit. Please fix it and add a test. Reply with a short summary for the PR.",
+  "claim": "test",
+  "upstream": {
+    "repo": "https://github.com/python-humanize/humanize.git",
+    "cache": "humanize",
+    "base": "f971127ce7e7770d3ff5be05cfc484bdf9302e04",
+    "fix": "ca892b368a535a79cc5e2181d052245b94fd6652",
+    "tests": [
+      "tests/test_number.py"
+    ],
+    "files": {
+      "src/humanize/_version.py": "__version__ = version = \"0.0.0\"\n"
+    }
+  },
+  "env": {
+    "PATH_PREPEND": "{cache}/venv-humanize/Scripts",
+    "PYTHONPATH": "src",
+    "PYTEST_ADDOPTS": "-p no:cacheprovider --color=no --ignore=tests/test_benchmarks.py"
+  },
+  "suite": [
+    "{cache}/venv-humanize/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q"
+  ],
+  "acceptance": [
+    "{cache}/venv-humanize/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_number.py"
+  ]
+}

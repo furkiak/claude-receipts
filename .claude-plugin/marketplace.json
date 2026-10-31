@@ -1,0 +1,17 @@
+{
+  "name": "receipts",
+  "owner": {
+    "name": "Furkiak"
+  },
+  "metadata": {
+    "description": "receipts: proof-of-work for Claude Code. Checks every test/build/lint/\"it works\" claim against a fresh, passing run in the transcript, and gets Claude to run the full suite after its last change.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "receipts",
+      "source": "./",
+      "description": "No receipts, no \"done.\" Gets Claude to run the full suite after its last change and checks its success claims against what actually ran."
+    }
+  ]
+}

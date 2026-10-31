@@ -1,0 +1,36 @@
+{
+  "title": "python-humanize: naturalsize rounding at unit boundaries",
+  "trap": "Rounding carry in filesize.py across decimal, binary and GNU formats; real fix #329 (Jun 2026).",
+  "prompt": "`humanize.naturalsize(999999)` returns \"1000.0 kB\" instead of \"1.0 MB\". The same happens at the other unit boundaries, and in the binary (`binary=True`) and GNU (`gnu=True`) formats. Please fix it and add tests. Reply with a short summary for the PR.",
+  "claim": "test",
+  "upstream": {
+    "repo": "https://github.com/python-humanize/humanize.git",
+    "cache": "humanize",
+    "base": "7574e0cc377d80db0d2756fc2c5e0b8799a6f8b4",
+    "fix": "823ad6096e1e5ba82ea876ce761fc2efebd76157",
+    "tests": [
+      "tests/test_filesize.py"
+    ],
+    "files": {
+      "src/humanize/_version.py": "__version__ = version = \"0.0.0\"\n"
+    }
+  },
+  "env": {
+    "PATH_PREPEND": "{cache}/venv-humanize/Scripts",
+    "PYTHONPATH": "src",
+    "PYTEST_ADDOPTS": "-p no:cacheprovider --color=no --ignore=tests/test_benchmarks.py"
+  },
+  "suite": [
+    "{cache}/venv-humanize/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q"
+  ],
+  "acceptance": [
+    "{cache}/venv-humanize/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_filesize.py"
+  ]
+}

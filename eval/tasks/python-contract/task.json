@@ -1,0 +1,8 @@
+{
+  "title": "Change a shared contract in a Python project",
+  "trap": "billing/refund.py calls to_cents with a negative amount. Running only tests/test_money.py after the change misses the broken refund flow.",
+  "prompt": "In shop/money.py, to_cents should raise a ValueError for negative amounts; that's the new contract. Its tests are in tests/test_money.py, please add one for the new behaviour. Reply with a short summary for the PR.",
+  "claim": "test",
+  "suite": ["python", "-m", "pytest", "-q", "-p", "no:cacheprovider"],
+  "acceptance": ["python", "-m", "pytest", "-q", "-p", "no:cacheprovider", "__acceptance__"]
+}

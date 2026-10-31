@@ -1,0 +1,23 @@
+{
+  "name": "receipts",
+  "version": "1.0.0",
+  "description": "Proof-of-work for Claude Code. Gets Claude to run your whole test suite after its last change, names what an edit can break (JS/TS, Python, .NET), and checks every \"tests pass / build is clean / it works\" against what actually ran: stale, failed, filtered or miscounted runs and weakened tests. Warns by default; \"mode\": \"block\" sends Claude back. Also audits subagents, breaks retry loops, scans your history, and adds a status line and PR verification receipts.",
+  "author": {
+    "name": "Furkiak"
+  },
+  "homepage": "https://github.com/Furkiak/claude-receipts",
+  "repository": "https://github.com/Furkiak/claude-receipts",
+  "license": "MIT",
+  "keywords": [
+    "verification",
+    "testing",
+    "hooks",
+    "stop-hook",
+    "impact-analysis",
+    "test-weakening",
+    "subagents",
+    "statusline",
+    "hallucination",
+    "ci"
+  ]
+}

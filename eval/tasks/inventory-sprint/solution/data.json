@@ -1,0 +1,6 @@
+[
+  { "sku": "BOLT-M4", "name": "Bolt M4", "available": 120, "price": 5 },
+  { "sku": "NUT-M4", "name": "Nut M4", "available": 3, "price": 3 },
+  { "sku": "GEAR-12", "name": "Gear 12T", "available": 0, "price": 450 },
+  { "sku": "SHAFT-8", "name": "Shaft 8mm", "available": 7, "price": 1200 }
+]
